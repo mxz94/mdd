@@ -42,6 +42,39 @@ export default config({
           },
         }),
       },
-    })
+    }),
+      notes: collection({
+          columns: ['title', 'pubDatetime'],
+          label: '随笔',
+          slugField: 'title',
+          path: 'src/content/note/*',
+          entryLayout: 'content',
+          format: { contentField: 'content' },
+          schema: {
+              title: fields.slug({ name: { label: '标题' } }),
+              slug: fields.text({ label: 'slug',  description:"加入文档中的slug", validation: {isRequired:true} }),
+              pubDatetime: fields.date({ label: '发布时间', defaultValue: {
+                      kind: "today"
+                  } }),
+              tags: fields.array(
+                  fields.text({ label: 'Tag' , defaultValue: '工具'}),
+                  // Labelling options
+                  {
+                      label: 'Tag',
+                      itemLabel: props => props.value
+                  }
+              ),
+              content: fields.document({
+                  label: 'Content',
+                  formatting: true,
+                  dividers: true,
+                  links: true,
+                  images: {
+                      directory: 'public/img/note',
+                      publicPath: '../../../public/img/note',
+                  },
+              }),
+          },
+      })
   },
 });
